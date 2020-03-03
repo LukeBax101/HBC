@@ -11,4 +11,4 @@ database/postgresData/*
 
 #File Data
 database/fileData/*
-!database/fileData/.gitKeep
+!database/fileData/.gitkeep
