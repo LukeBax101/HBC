@@ -1,0 +1,14 @@
+# Dependency directories
+node_modules/
+
+# Secrets
+secrets/*
+!secrets/.gitkeep 
+
+#DataBase Data
+database/postgresData/*
+!database/postgresData/.gitkeep 
+
+#File Data
+database/fileData/*
+!database/fileData/.gitKeep
