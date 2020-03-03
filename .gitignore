@@ -5,9 +5,8 @@ node_modules/
 secrets/*
 !secrets/.gitkeep 
 
-#DataBase Data
-database/postgresData/*
-!database/postgresData/.gitkeep 
+# Database
+database/volume
 
 #File Data
 database/fileData/*
