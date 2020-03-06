@@ -1,0 +1,15 @@
+{
+  "short_name": "HBC",
+  "name": "Holiday Bible Club",
+  "theme_color": "#4A90E2",
+  "background_color": "#F7F8F9",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "public/img/icons/favicon-32x32.png",
+      "type": "image/png",
+      "sizes": "32x32"
+    },
+  ],
+  "start_url": "/?utm_source=launcher"
+}
