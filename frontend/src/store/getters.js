@@ -1,3 +1,3 @@
 export const getters = {
-  counter: state => state.counter,
+  counter: (state) => state.counter,
 };
