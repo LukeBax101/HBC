@@ -4,7 +4,7 @@ CREATE TABLE slides (slide_id UUID PRIMARY KEY, song_id UUID REFERENCES songs(so
 
 CREATE TABLE state (state_id UUID PRIMARY KEY, home BOOLEAN, race BOOLEAN, song_overlay BOOLEAN, slide_id UUID REFERENCES slides(slide_id));
 
-CREATE TABLE dates (dates_id UUID PRIMARY KEY, day_1 TIMESTAMP, day_2 TIMESTAMP, day_3 TIMESTAMP, final TIMESTAMP);
+CREATE TABLE dates (dates_id UUID PRIMARY KEY, start TIMESTAMP, final TIMESTAMP);
 
 CREATE TABLE sessions (session_id UUID PRIMARY KEY, name VARCHAR(255), password_hash VARCHAR(255), state_id UUID REFERENCES state(state_id), dates_id UUID REFERENCES dates(dates_id));
 
