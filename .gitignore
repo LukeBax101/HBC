@@ -3,11 +3,19 @@ node_modules/
 
 # Secrets
 secrets/*
-!secrets/.gitkeep 
+!secrets/.gitkeep
 
 # Database
 database/volume
 
-#File Data
-database/fileData/*
-!database/fileData/.gitkeep
+#Session Images
+database/images/sessions/*
+!database/images/sessions/.gitkeep
+
+#Slide Images
+database/images/slides/*
+!database/images/slides/.gitkeep
+
+#Team Images
+database/images/teams/*
+!database/images/teams/.gitkeep
