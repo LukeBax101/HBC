@@ -36,6 +36,18 @@ const Song = bookshelf.Model.extend({
   }
 });
 
+const SessionSong = bookshelf.Model.extend({
+  tableName: 'session_songs',
+  idAttribute: 'session_song_id',
+  uuid: true,
+  session: function() {
+      return this.hasMany(Session).atach(sessions['session_id']);
+  },
+  song: function() {
+      return this.hasMany(Song).attach(songs['song_id']);
+  }
+})
+
 const Slide = bookshelf.Model.extend({
   tableName: 'slides',
   idAttribute: "slide_id",
@@ -57,4 +69,4 @@ const State = bookshelf.Model.extend({
   }
 });
 
-module.exports = { Dates, State, Session, Team, Song, Slide };
+module.exports = { Dates, State, Session, Team, Song, Slide, SessionSong };

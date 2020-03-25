@@ -1,32 +1,31 @@
 const { Slide }  = require('./models');
+const { newFile } = require('./files');
+const fs = require('fs');
+const path = require('path');
 
-async function newSlide(req) {
+async function newSlide(req, fileName) {
     if (req && req['song_id'] && req['slide_no']) {
         const slide = await Slide.forge({
           'song_id': req['song_id'],
           'slide_no': req['slide_no'],
         }).save();
-        // Add slide to file system
-        //What of other slides order?
-        return slide.toJSON();
+        const slideJson = slide.toJSON();
+        fs.rename( path.join(__dirname,  `./database/images/slides/${fileName}`),  path.join(__dirname, `./database/images/slides/${slideJson['slide_id']}.png`))
+        return slideJson;
     } else {
         throw new Error('Please provide song ID and slide number');
     }
-}
-
-async function getSlide(id) {
-    const slideRequest = await new Slide({ ['slide_id']: id }).fetch();
-    const slide = slideRequest.toJSON();
-    // get slide from file system
-    return {
-      ...slide,
-    };
 }
 
 async function deleteSlide(id) {
     await new Slide({ ['slide_id']: id }).destroy({require: true});
     // Remove slide from file system
     // What of 'slide_no' of other slides?
+    try {
+      await fs.unlinkSync(path.join(__dirname, `./database/images/slides/${id}.png`));
+    } catch (e) {
+      throw new Error('Could no delete from filesystem, perhaps the file does not exist');
+    }
     return 'Successfully deleted slide';
 }
 
@@ -41,10 +40,20 @@ async function editSlide(id, req) {
     return slideModel.save();
 }
 
+async function replaceSlide(id, fileName) {
+  if (id) {
+    await fs.unlinkSync(path.join(__dirname, `./database/images/slides/${id}.png`));;
+    fs.rename(path.join(__dirname,  `./database/images/slides/${fileName}`),  path.join(__dirname, `./database/images/slides/${id}.png`));
+    return 'Slide replaced successfully'
+  } else {
+    throw new Error('Please provide slide ID');
+  }
+}
+
 
 module.exports = {
     newSlide,
-    getSlide,
     editSlide,
     deleteSlide,
+    replaceSlide,
 };

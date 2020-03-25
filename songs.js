@@ -1,4 +1,5 @@
 const { Song, Slide }  = require('./models');
+const { deleteSlide } = require('./slides');
 
 async function newSong(req) {
     const song = await Song.forge({
@@ -8,8 +9,16 @@ async function newSong(req) {
 }
 
 async function getAllSongs() {
-    const songs = await Song.fetchAll();
-    return songs.toJSON();
+    const songsFetch = await Song.query(function (qb) {
+      qb.join('sessionSong', 'Song.song_id', 'sessionSong.song_id');
+      qb.groupBy('songs.song_id');
+      qb.select("songs.*");
+      qb.count('* as session_count');
+      qb.orderBy("song_count", "desc");
+    }).fetchAll();
+    const songs = songsFetch.toJSON();
+    songs
+    return songs;
 }
 
 async function getSong(id) {
@@ -28,8 +37,11 @@ async function deleteSong(id) {
     const slideFetch = await Slide.where({ ['song_id']: id }).fetchAll();
     const slides = await slideFetch.toJSON();
     slides.map(slide => slide['slide_id']).forEach(async (slideId) => {
-        await new Slide({ ['slide_id']: slideId }).destroy({require: true});
-        // Also delete slide from file system here
+        try {
+            deleteSlide(slideId)
+        } catch (e) {
+            console.log('Could not delete slide');
+        }
     });
     await new Song({ ['song_id']: id }).destroy({require: true});
     return 'Successfully deleted song';

@@ -8,9 +8,13 @@ secrets/*
 # Database
 database/volume
 
-#Session Images
-database/images/sessions/*
-!database/images/sessions/.gitkeep
+#Session Home Images
+database/images/sessions/home/*
+!database/images/sessions/home/.gitkeep
+
+#Session Race Images
+database/images/sessions/race/*
+!database/images/sessions/race/.gitkeep
 
 #Slide Images
 database/images/slides/*

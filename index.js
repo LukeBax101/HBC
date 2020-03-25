@@ -1,16 +1,31 @@
 const express = require('express');
+const fs = require('fs');
+const path = require('path');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const multer = require("multer");
 const morgan = require('morgan');
 const bookshelf = require('./bookshelf');
 
+var slideStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, "./database/images/slides"))
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+    cb(null, `${uniqueSuffix}.png`)
+  }
+});
+var slideUpload = multer({ storage: slideStorage });
+
 const {
-    Session,
+     Session,
      Dates,
      Team,
      State,
      Song,
-     Slide
+     Slide,
+     SessionSong
 } = require('./models');
 
 const {
@@ -41,8 +56,15 @@ const {
     newSlide,
     deleteSlide,
     editSlide,
-    getSlide,
+    replaceSlide,
 } = require('./slides');
+
+const {
+    getSessionSongs,
+    getSongSessions,
+    newSessionSong,
+    deleteSessionSong,
+} = require('./session-songs');
 
 const app = express();
 
@@ -179,17 +201,11 @@ app.delete('/song/:id', async (req, res) => {
 
 // Slide CRUD
 
-app.get('/slide/:id', async (req, res) => {
-    try {
-      res.json(await getSlide(req.params.id));
-    } catch (e) {
-      res.status(400).send(e.message);
-    }
-});
+app.use('/slide', express.static(__dirname + '/database/images/slides'));
 
-app.post('/slide', async (req, res) => {
+app.post('/slide', slideUpload.single('slide'), async (req, res) => {
     try {
-      res.json(await newSlide(req.body));
+      res.json(await newSlide(req.body, req.file.filename));
     } catch (e) {
       res.status(400).send(e.message);
     }
@@ -203,6 +219,14 @@ app.patch('/slide/:id', async (req, res) => {
     }
 });
 
+app.post('/slide/:id', slideUpload.single('slide'), async (req, res) => {
+    try {
+      res.json(await replaceSlide(req.params.id, req.file.filename));
+    } catch (e) {
+      res.status(400).send(e.message);
+    }
+});
+
 app.delete('/slide/:id', async (req, res) => {
     try {
       res.send(await deleteSlide(req.params.id));
@@ -210,6 +234,41 @@ app.delete('/slide/:id', async (req, res) => {
       res.status(400).send(e.message);
     }
 });
+
+// SessionSong CRUD
+
+app.get('/session-song/session/:id', async (req, res) => {
+    try {
+      res.json(await getSessionSongs(req.params.id));
+    } catch (e) {
+      res.status(400).send(e.message);
+    }
+});
+
+app.get('/session-song/song/:id', async (req, res) => {
+    try {
+      res.json(await getSongSessions(req.params.id));
+    } catch (e) {
+      res.status(400).send(e.message);
+    }
+});
+
+app.post('/session-song', async (req, res) => {
+    try {
+      res.json(await newSessionSong(req.body));
+    } catch (e) {
+      res.status(400).send(e.message);
+    }
+});
+
+app.delete('/session-song/session/:sessionId/song/:songId', async (req, res) => {
+    try {
+      res.send(await deleteSessionSong(req.params.sessionId, req.params.songId));
+    } catch (e) {
+      res.status(400).send(e.message);
+    }
+});
+
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => {
