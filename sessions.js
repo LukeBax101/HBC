@@ -1,4 +1,6 @@
 const { Session, Dates, State, Team }  = require('./models');
+const fs = require('fs');
+const path = require('path');
 
 async function newSession(req) {
     let dates = await Dates.forge({
@@ -132,6 +134,35 @@ async function editDates(id, req) {
     return datesModel.save();
 }
 
+async function sessionRaceUpload(id, fileName) {
+    fs.rename( path.join(__dirname,  `./database/images/sessions/race/${fileName}`),  path.join(__dirname, `./database/images/sessions/race/${id}.png`), () => {});
+    return 'Race image uplaoded successfully'
+}
+
+async function sessionHomeUpload(id, fileName) {
+    fs.rename( path.join(__dirname,  `./database/images/sessions/home/${fileName}`),  path.join(__dirname, `./database/images/sessions/home/${id}.png`), () => {});
+    return 'Home image uplaoded successfully'
+}
+
+async function deleteSessionRace(id) {
+  try {
+    await fs.unlinkSync(path.join(__dirname, `./database/images/sessions/race/${id}.png`));
+  } catch (e) {
+    throw new Error('Could no delete from filesystem, perhaps the file does not exist');
+  }
+  return 'Successfully deleted race image';
+}
+
+async function deleteSessionHome(id) {
+  try {
+    await fs.unlinkSync(path.join(__dirname, `./database/images/sessions/home/${id}.png`));
+  } catch (e) {
+    throw new Error('Could no delete from filesystem, perhaps the file does not exist');
+  }
+  return 'Successfully deleted home image';
+}
+
+
 module.exports = {
     newSession,
     getAllSessions,
@@ -139,5 +170,9 @@ module.exports = {
     editSession,
     deleteSession,
     editDates,
-    editState
+    editState,
+    sessionRaceUpload,
+    sessionHomeUpload,
+    deleteSessionRace,
+    deleteSessionHome,
 };

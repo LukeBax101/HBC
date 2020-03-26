@@ -10,11 +10,11 @@ async function newSong(req) {
 
 async function getAllSongs() {
     const songsFetch = await Song.query(function (qb) {
-      qb.join('sessionSong', 'Song.song_id', 'sessionSong.song_id');
+      qb.leftJoin('session_songs', 'songs.song_id', 'session_songs.song_id');
       qb.groupBy('songs.song_id');
       qb.select("songs.*");
-      qb.count('* as session_count');
-      qb.orderBy("song_count", "desc");
+      qb.count('session_songs.session_id as session_count');
+      qb.orderBy("session_count", "desc");
     }).fetchAll();
     const songs = songsFetch.toJSON();
     songs

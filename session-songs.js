@@ -18,6 +18,23 @@ async function getSessionSongs(sessionId) {
     return sessionSongs.toJSON();
 }
 
+async function editSessionSong(req) {
+    if (req && req['song_id'] && req['session_id'] && req['song_no']) {
+      const sessionSongModel = await new SessionSong({
+        'session_id': req['session_id'],
+        'song_id': req['song_id'],
+      });
+      const sessionSongRequest = await sessionSongModel.set({
+        'session_id': req['session_id'],
+        'song_id': req['song_id'],
+        'song_no': req['song_no'],
+      });
+      return sessionSongModel.save();
+    } else {
+      throw new Error('Please provide song ID, session ID and song number')
+    }
+}
+
 async function getSongSessions(songId) {
   const sessionSongs = await SessionSong.where({ 'song_id': songId}).fetchAll();
   return sessionSongs.toJSON();
@@ -37,4 +54,5 @@ module.exports = {
     getSessionSongs,
     getSongSessions,
     deleteSessionSong,
+    editSessionSong,
 };

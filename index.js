@@ -7,16 +7,12 @@ const multer = require("multer");
 const morgan = require('morgan');
 const bookshelf = require('./bookshelf');
 
-var slideStorage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, "./database/images/slides"))
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-    cb(null, `${uniqueSuffix}.png`)
-  }
-});
-var slideUpload = multer({ storage: slideStorage });
+const {
+    slideUpload,
+    raceUpload,
+    homeUpload,
+    teamUpload,
+} = require('./uploads');
 
 const {
      Session,
@@ -35,13 +31,19 @@ const {
     editSession,
     deleteSession,
     editDates,
-    editState
+    editState,
+    sessionRaceUpload,
+    sessionHomeUpload,
+    deleteSessionRace,
+    deleteSessionHome,
 } = require('./sessions');
 
 const {
     newTeam,
     deleteTeam,
     editTeam,
+    teamIconUpload,
+    deleteTeamIcon,
 } = require('./teams');
 
 const {
@@ -64,6 +66,7 @@ const {
     getSongSessions,
     newSessionSong,
     deleteSessionSong,
+    editSessionSong,
 } = require('./session-songs');
 
 const app = express();
@@ -74,6 +77,42 @@ app.use(bodyParser.json());
 app.use('/', express.static(__dirname + '/frontend/dist'));
 
 // Session CRUD
+
+app.use('/session/race', express.static(__dirname + '/database/images/sessions/race'));
+app.use('/session/home', express.static(__dirname + '/database/images/sessions/home'));
+
+app.post('/session/race/:id', raceUpload.single('race'), async (req, res) => {
+    try {
+      res.json(await sessionRaceUpload(req.params.id, req.file.filename));
+
+    } catch (e) {
+      res.status(400).send(e.message);
+    }
+});
+
+app.post('/session/home/:id', homeUpload.single('home'), async (req, res) => {
+    try {
+      res.json(await sessionHomeUpload(req.params.id, req.file.filename));
+    } catch (e) {
+      res.status(400).send(e.message);
+    }
+});
+
+app.delete('/session/race/:id', async (req, res) => {
+    try {
+      res.send(await deleteSessionRace(req.params.id));
+    } catch (e) {
+      res.status(400).send(e.message);
+    }
+});
+
+app.delete('/session/home/:id', async (req, res) => {
+    try {
+      res.send(await deleteSessionHome(req.params.id));
+    } catch (e) {
+      res.status(400).send(e.message);
+    }
+});
 
 app.get('/sessions', async (req, res) => {
     try {
@@ -132,6 +171,24 @@ app.delete('/session/:id', async (req, res) => {
 });
 
 // Team
+app.use('/team/icon', express.static(__dirname + '/database/images/teams'));
+
+app.post('/team/icon/:id', teamUpload.single('team'), async (req, res) => {
+    try {
+      res.json(await teamIconUpload(req.params.id, req.file.filename));
+    } catch (e) {
+      res.status(400).send(e.message);
+    }
+});
+
+app.delete('/team/icon/:id', async (req, res) => {
+    try {
+      res.send(await deleteTeamIcon(req.params.id));
+    } catch (e) {
+      res.status(400).send(e.message);
+    }
+});
+
 
 app.post('/team', async (req, res) => {
     try {
@@ -256,6 +313,14 @@ app.get('/session-song/song/:id', async (req, res) => {
 app.post('/session-song', async (req, res) => {
     try {
       res.json(await newSessionSong(req.body));
+    } catch (e) {
+      res.status(400).send(e.message);
+    }
+});
+
+app.patch('/session-song', async (req, res) => {
+    try {
+      res.json(await editSessionSong(req.body));
     } catch (e) {
       res.status(400).send(e.message);
     }

@@ -10,7 +10,7 @@ async function newSlide(req, fileName) {
           'slide_no': req['slide_no'],
         }).save();
         const slideJson = slide.toJSON();
-        fs.rename( path.join(__dirname,  `./database/images/slides/${fileName}`),  path.join(__dirname, `./database/images/slides/${slideJson['slide_id']}.png`))
+        fs.rename( path.join(__dirname,  `./database/images/slides/${fileName}`),  path.join(__dirname, `./database/images/slides/${slideJson['slide_id']}.png`), () => {});
         return slideJson;
     } else {
         throw new Error('Please provide song ID and slide number');

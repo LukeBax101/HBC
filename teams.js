@@ -1,4 +1,6 @@
 const { Team }  = require('./models');
+const fs = require('fs');
+const path = require('path');
 
 async function newTeam(req) {
     if (req && req['session_id']) {
@@ -34,9 +36,25 @@ async function editTeam(id, req) {
     return teamModel.save();
 }
 
+async function teamIconUpload(id, fileName) {
+    fs.rename( path.join(__dirname,  `./database/images/teams/${fileName}`),  path.join(__dirname, `./database/images/teams/${id}.gif`), () => {});
+    return 'Team icon uploaded successfully'
+}
+
+async function deleteTeamIcon(id) {
+  try {
+    await fs.unlinkSync(path.join(__dirname, `./database/images/teams/${id}.gif`));
+  } catch (e) {
+    throw new Error('Could no delete from filesystem, perhaps the file does not exist');
+  }
+  return 'Successfully deleted team icon';
+}
+
 
 module.exports = {
     newTeam,
     editTeam,
     deleteTeam,
+    teamIconUpload,
+    deleteTeamIcon,
 };
