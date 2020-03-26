@@ -19,8 +19,6 @@ async function newSlide(req, fileName) {
 
 async function deleteSlide(id) {
     await new Slide({ ['slide_id']: id }).destroy({require: true});
-    // Remove slide from file system
-    // What of 'slide_no' of other slides?
     try {
       await fs.unlinkSync(path.join(__dirname, `./database/images/slides/${id}.png`));
     } catch (e) {
@@ -36,7 +34,6 @@ async function editSlide(id, req) {
     const slideRequest = await slideModel.set({
       'slide_no': (req && req['slide_no']) || slide['slide_no'],
     });
-    // Modify slide in file system
     return slideModel.save();
 }
 

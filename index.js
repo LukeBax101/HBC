@@ -170,7 +170,8 @@ app.delete('/session/:id', async (req, res) => {
     }
 });
 
-// Team
+// Team CRUD
+
 app.use('/team/icon', express.static(__dirname + '/database/images/teams'));
 
 app.post('/team/icon/:id', teamUpload.single('team'), async (req, res) => {

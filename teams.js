@@ -10,7 +10,6 @@ async function newTeam(req) {
           color:  (req && req.color) || '#000000',
           score: 0
         }).save();
-        // Team icons?
         return team.toJSON();
     } else {
         throw new Error('Please provide session ID');
@@ -19,7 +18,10 @@ async function newTeam(req) {
 
 async function deleteTeam(id) {
     await new Team({ ['team_id']: id }).destroy({require: true});
-    // Team icons?
+
+    try {
+        await deleteTeamIcon(id);
+    } catch (e) {}
     return 'Successfully deleted team';
 }
 
@@ -32,7 +34,6 @@ async function editTeam(id, req) {
       color: (req && req.color) || team.color,
       score: team.score + ((req && req.score) || 0),
     });
-    // Team icons?
     return teamModel.save();
 }
 

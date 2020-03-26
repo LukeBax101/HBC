@@ -1,4 +1,4 @@
-const { Song, Slide }  = require('./models');
+const { Song, Slide, SessionSong }  = require('./models');
 const { deleteSlide } = require('./slides');
 
 async function newSong(req) {
@@ -42,6 +42,14 @@ async function deleteSong(id) {
         } catch (e) {
             console.log('Could not delete slide');
         }
+    });
+    const sessionSongFetch = await SessionSong.where({ ['song_id']: id }).fetchAll();
+    const sessionSongs = await sessionSongFetch.toJSON();
+    sessionSongs.forEach(async (sessionSong) => {
+        await SessionSong.where({
+           ['session_id']: sessionSong['session_id'],
+           ['song_id']: sessionSong['song_id'],
+         }).destroy({require: true});
     });
     await new Song({ ['song_id']: id }).destroy({require: true});
     return 'Successfully deleted song';

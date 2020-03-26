@@ -1,4 +1,5 @@
-const { Session, Dates, State, Team }  = require('./models');
+const { Session, Dates, State, Team, SessionSong } = require('./models');
+const { deleteTeam } = require('./teams');
 const fs = require('fs');
 const path = require('path');
 
@@ -21,8 +22,6 @@ async function newSession(req) {
       'dates_id': datesId,
       'state_id': stateId
     }).save();
-    // Race background?
-    // Home background?
     return session.toJSON();
 }
 
@@ -37,8 +36,6 @@ async function getSession(id) {
     const datesRequest = await new Dates({ ['dates_id']: session['dates_id'] }).fetch();
     const stateRequest = await new State({ ['state_id']: session['state_id'] }).fetch();
     const teamRequest = await Team.where({ ['session_id']: id }).fetchAll();
-    // Race background?
-    // Home background?
     return {
       ...session,
       state: stateRequest.toJSON(),
@@ -53,14 +50,28 @@ async function deleteSession(id) {
     const teamFetch = await Team.where({ ['session_id']: id }).fetchAll();
     const teams = await teamFetch.toJSON();
     teams.map(team => team['team_id']).forEach(async (teamId) => {
-        await new Team({ ['team_id']: teamId }).destroy({require: true});
-        // Team icons?
+        await deleteTeam(teamId);
+    });
+    const sessionSongFetch = await SessionSong.where({ ['session_id']: id }).fetchAll();
+    const sessionSongs = await sessionSongFetch.toJSON();
+    sessionSongs.forEach(async (sessionSong) => {
+        await SessionSong.where({
+           ['session_id']: sessionSong['session_id'],
+           ['song_id']: sessionSong['song_id'],
+         }).destroy({require: true});
     });
     await new Session({ ['session_id']: id }).destroy({require: true});
-    // Race background?
-    // Home background?
     await new Dates({ ['dates_id']: session['dates_id'] }).destroy({require: true});
     await new State({ ['state_id']: session['state_id'] }).destroy({require: true});
+
+
+    try{
+        await deleteSessionRace(id);
+    } catch (e)  {}
+
+    try{
+        await deleteSessionHome(id);
+    } catch (e)  {}
 
     return 'Successfully deleted session';
 }
@@ -73,8 +84,6 @@ async function editSession(id, req) {
       'name': (req && req.name) || session.name,
       'password_hash': (req && req['password_hash']) || session['password_hash']
     });
-    // Race background?
-    // Home background?
     return sessionModel.save();
 }
 
@@ -136,12 +145,12 @@ async function editDates(id, req) {
 
 async function sessionRaceUpload(id, fileName) {
     fs.rename( path.join(__dirname,  `./database/images/sessions/race/${fileName}`),  path.join(__dirname, `./database/images/sessions/race/${id}.png`), () => {});
-    return 'Race image uplaoded successfully'
+    return 'Race image uploaded successfully'
 }
 
 async function sessionHomeUpload(id, fileName) {
     fs.rename( path.join(__dirname,  `./database/images/sessions/home/${fileName}`),  path.join(__dirname, `./database/images/sessions/home/${id}.png`), () => {});
-    return 'Home image uplaoded successfully'
+    return 'Home image uploaded successfully'
 }
 
 async function deleteSessionRace(id) {
