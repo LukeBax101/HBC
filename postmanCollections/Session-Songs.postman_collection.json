@@ -1,0 +1,131 @@
+{
+	"info": {
+		"_postman_id": "5c48e255-479e-4d40-ae6d-567eb5785c0e",
+		"name": "Session-Songs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:4000/session-song",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"session_id\": \"8793b3d2-89e2-4f96-a2e1-08ba3e12027d\",\n\t\"song_id\": \"38c6a17b-1696-477a-8089-fea4c603bf6c\",\n\t\"song_no\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/session-song",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"session-song"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:4000/session-song",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"session_id\": \"8793b3d2-89e2-4f96-a2e1-08ba3e12027d\",\n\t\"song_id\": \"38c6a17b-1696-477a-8089-fea4c603bf6c\",\n\t\"song_no\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/session-song",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"session-song"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:4000/session-song/session/id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/session-song/session/0d4efd54-acdd-4117-a4cc-de284c4587c6",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"session-song",
+						"session",
+						"0d4efd54-acdd-4117-a4cc-de284c4587c6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:4000/session-song/song/id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/session-song/song/0d4efd54-acdd-4117-a4cc-de284c4587c6",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"session-song",
+						"song",
+						"0d4efd54-acdd-4117-a4cc-de284c4587c6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:4000/session-song/session/sessionId/song/songId",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/session-song/session/0d4efd54-acdd-4117-a4cc-de284c4587c6/song/8d384aac-e27f-4f92-bca2-bc3dbfe78bf1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"session-song",
+						"session",
+						"0d4efd54-acdd-4117-a4cc-de284c4587c6",
+						"song",
+						"8d384aac-e27f-4f92-bca2-bc3dbfe78bf1"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

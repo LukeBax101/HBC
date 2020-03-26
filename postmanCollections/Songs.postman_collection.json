@@ -1,0 +1,126 @@
+{
+	"info": {
+		"_postman_id": "80012644-c36a-48d8-92f2-d4d17e0bc631",
+		"name": "Songs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:4000/songs",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/songs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"songs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:4000/song",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"song2\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/song",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"song"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:4000/song/id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/song/a3679f03-23b5-45ea-ae5d-45eb83b95522",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"song",
+						"a3679f03-23b5-45ea-ae5d-45eb83b95522"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:4000/song/id",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"song4\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/song/a3679f03-23b5-45ea-ae5d-45eb83b95522",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"song",
+						"a3679f03-23b5-45ea-ae5d-45eb83b95522"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:4000/song/id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/song/a3679f03-23b5-45ea-ae5d-45eb83b95522",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"song",
+						"a3679f03-23b5-45ea-ae5d-45eb83b95522"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

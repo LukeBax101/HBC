@@ -1,0 +1,330 @@
+{
+	"info": {
+		"_postman_id": "44a842e9-927a-47a6-b698-379962e4b65a",
+		"name": "Sessions",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:4000/sessions",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/sessions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"sessions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:4000/session/id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/session/dcaf49aa-1378-4bc5-a67c-e7066cda217a",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"session",
+						"dcaf49aa-1378-4bc5-a67c-e7066cda217a"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:4000/session/id",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n\t\"name\": \"new Name\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/session/7b206739-58f8-4900-ace6-86f42878b91c",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"session",
+						"7b206739-58f8-4900-ace6-86f42878b91c"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:4000/session/id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/session/084825d5-f827-4196-9bac-5df03f02194a",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"session",
+						"084825d5-f827-4196-9bac-5df03f02194a"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:4000/state/id",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"state\": \"song\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/state/495bb454-67f2-4afa-a533-d415f7dcd877",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"state",
+						"495bb454-67f2-4afa-a533-d415f7dcd877"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:4000/dates/id",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"start\": \"2020-03-26T00:07:03.396Z\",\r\n\t\"final\": \"2020-03-26T00:07:03.396Z\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/dates/68b6e2c5-e541-4582-800d-000fc9a12eaa",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"dates",
+						"68b6e2c5-e541-4582-800d-000fc9a12eaa"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:4000/session",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"testName22222\",\n\t\"password_hash\": \"hashy22222\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/session",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"session"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:4000/session/race/id",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "race",
+							"type": "file",
+							"src": "/C:/Users/Luke Baxter/Downloads/icons8-crown-30.png"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:4000/session/race/e48f51b8-27f6-4eac-b8f2-830758417bbb",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"session",
+						"race",
+						"e48f51b8-27f6-4eac-b8f2-830758417bbb"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:4000/session/home/id",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "home",
+							"type": "file",
+							"src": "/C:/Users/Luke Baxter/Downloads/icons8-crown-30.png"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:4000/session/home/e48f51b8-27f6-4eac-b8f2-830758417bbb",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"session",
+						"home",
+						"e48f51b8-27f6-4eac-b8f2-830758417bbb"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:4000/session/race/id.png",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/session/home/e48f51b8-27f6-4eac-b8f2-830758417bbb.png",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"session",
+						"home",
+						"e48f51b8-27f6-4eac-b8f2-830758417bbb.png"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:4000/session/home/id.png",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/session/race/e48f51b8-27f6-4eac-b8f2-830758417bbb.png",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"session",
+						"race",
+						"e48f51b8-27f6-4eac-b8f2-830758417bbb.png"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:4000/session/home/id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/session/home/e48f51b8-27f6-4eac-b8f2-830758417bbb",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"session",
+						"home",
+						"e48f51b8-27f6-4eac-b8f2-830758417bbb"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:4000/session/race/id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/session/race/e48f51b8-27f6-4eac-b8f2-830758417bbb",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"session",
+						"race",
+						"e48f51b8-27f6-4eac-b8f2-830758417bbb"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
