@@ -5,18 +5,18 @@
       <router-link to="/score">Score</router-link>
       <router-link to="/settings">Settings</router-link>
     </div>
-    <HelloWorld msg="Welcome to the live page!"/>
+    <!-- <HelloWorld msg="Welcome to the live page!"/> -->
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue';
+// import HelloWorld from '@/components/HelloWorld.vue';
 
 export default {
   name: 'Sessions',
   components: {
-    HelloWorld,
+    // HelloWorld,
   },
 };
 </script>

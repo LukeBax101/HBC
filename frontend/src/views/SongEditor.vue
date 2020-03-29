@@ -1,20 +1,39 @@
 <template>
   <div class="song-editor">
-    <div id="nav">
-      <router-link to="/songs">Back</router-link> |
-    </div>
-    <HelloWorld msg="Welcome to the song editor page!"/>
+    <Header
+     title="Song Viewer"
+     leftIcon="arrow-left"
+     leftScale="1.7"
+     right-icon="pencil"
+     rightScale="1.5"
+     v-on:left-clicked="goToSongs"
+     v-on:right-clicked="editSong"
+    ></Header>
+    <p>{{ activeSongId }}</p>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue';
+import { mapGetters } from 'vuex';
+import Header from '@/components/Header.vue';
 
 export default {
   name: 'SongEditor',
   components: {
-    HelloWorld,
+    Header,
+  },
+  computed: {
+    ...mapGetters([
+      'activeSongId',
+    ]),
+  },
+  methods: {
+    goToSongs() {
+      this.$router.push('/songs');
+    },
+    editSong() {
+      console.log('edit song');
+    },
   },
 };
 </script>

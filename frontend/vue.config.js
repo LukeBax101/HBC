@@ -2,7 +2,7 @@ module.exports = {
     publicPath: '/hbc',
     pwa: {
 	name: 'Holiday Bible Club',
-	themeColor: '#FF8857',
+	themeColor: '#e87121',
 	appleMobileWebAppCapable: 'yes',
 	appleMobileWebAppStatusBarStyle: 'black',
 	iconPaths: {

@@ -1,3 +1,6 @@
 export const state = {
-  counter: 0,
+  activeSessionId: null,
+  activeSongId: null,
+  sessions: null,
+  songs: null,
 };

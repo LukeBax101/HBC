@@ -6,6 +6,8 @@ const bodyParser = require('body-parser');
 const multer = require("multer");
 const morgan = require('morgan');
 const bookshelf = require('./bookshelf');
+const socketIO = require('socket.io');
+var http = require('http');
 
 const {
     slideUpload,
@@ -72,9 +74,12 @@ const {
 const app = express();
 
 app.use(morgan('tiny'));
-app.use(cors());
+app.use(cors({credentials: true, origin: 'http://localhost:8080'}));
 app.use(bodyParser.json());
 app.use('/', express.static(__dirname + '/frontend/dist'));
+
+var server = http.createServer(app);
+let io = socketIO.listen(server);
 
 // Session CRUD
 
@@ -84,7 +89,6 @@ app.use('/session/home', express.static(__dirname + '/database/images/sessions/h
 app.post('/session/race/:id', raceUpload.single('race'), async (req, res) => {
     try {
       res.json(await sessionRaceUpload(req.params.id, req.file.filename));
-
     } catch (e) {
       res.status(400).send(e.message);
     }
@@ -132,7 +136,9 @@ app.get('/session/:id', async (req, res) => {
 
 app.post('/session', async (req, res) => {
     try {
-      res.json(await newSession(req.body));
+      const session = await newSession(req.body);
+      io.emit('new_session', session);
+      res.json(session);
     } catch (e) {
       res.status(400).send(e.message);
     }
@@ -337,6 +343,6 @@ app.delete('/session-song/session/:sessionId/song/:songId', async (req, res) => 
 
 
 const port = process.env.PORT || 4000;
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`listening on ${port}`);
 });
