@@ -1,9 +1,11 @@
+const fs = require('fs');
+const password = fs.readFileSync('./secrets/postgres-passwd', 'utf8').trim();
 const knex = require('knex')({
   client: 'pg',
   connection: {
     host     : '127.0.0.1',
     user     : 'postgres',
-    password : 'abcde12345',
+    password,
     database : 'postgres',
     charset  : 'utf8'
   }
