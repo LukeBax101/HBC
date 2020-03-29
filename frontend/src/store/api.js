@@ -1,11 +1,13 @@
+import { API_URL } from '@/properties';
+
 async function getAllSessions({ commit }) {
-  const req = await fetch('http://localhost:4000/sessions');
+  const req = await fetch(`${API_URL}/sessions`);
   const sessions = await req.json();
   commit('updateAllSessions', sessions);
 }
 
 async function getAllSongs({ commit }) {
-  const req = await fetch('http://localhost:4000/songs');
+  const req = await fetch(`${API_URL}/songs`);
   const songs = await req.json();
   commit('updateAllSongs', songs);
 }
