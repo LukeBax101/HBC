@@ -13,7 +13,10 @@ import 'bootstrap-vue/dist/bootstrap-vue.css';
 Vue.config.productionTip = false;
 
 
-export const socket = socketio(API_URL, { path: SOCKET_PATH });
+export const socket = socketio(API_URL, {
+  path: SOCKET_PATH,
+  transports: ['websocket'],
+});
 
 Vue.use(VueSocketIOExt, socket, { store });
 Vue.use(BootstrapVue);

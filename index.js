@@ -79,7 +79,9 @@ app.use(bodyParser.json());
 app.use('/', express.static(__dirname + '/frontend/dist'));
 
 var server = http.createServer(app);
-let io = socketIO.listen(server);
+let io = socketIO.listen(server, {
+    transports: ['websocket']
+});
 
 // Session CRUD
 
