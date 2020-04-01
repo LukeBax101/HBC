@@ -146,11 +146,10 @@ app.post('/session/login/:id', async (req, res) => {
     try {
       const valid = await loginToSession(req.params.id, req.body);
       if (valid) {
-        const isSecure = req.app.get('env') !== 'development';
         res.cookie('session_id', req.params.id, {
           httpOnly: true,
           signed: true,
-          secure: isSecure,
+          secure: true,
         });
         res.send('Logged in');
       } else {

@@ -14,7 +14,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
 import EventBus from './event-bus';
 
 export default {
@@ -79,6 +78,7 @@ export default {
 }
 .alert {
   position: absolute;
+  width: 100%;
   top: 55px;
   z-index: 10000;
 }
