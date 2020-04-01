@@ -10,7 +10,7 @@
         title="Current Sessions"
         leftIcon="arrow-left"
         leftScale="1.7"
-        v-on:left-clicked="goToHome"
+        v-on:left-clicked="$router.push('/')"
       ></Header>
       <div class="sessions-list">
         <List
@@ -21,36 +21,22 @@
           v-on:item-clicked="sessionClicked"
         >
         </List>
-        <b-modal
-          id="login-modal"
-          v-model="showLoginModal"
-          ref="modal"
+        <Modal
+          id = "login-modal"
           :title="loginTitle"
-          v-on:show="resetModal"
-          v-on:hidden="resetModal"
-          v-on:ok="handleOk"
-        >
-          <form ref="form" @submit.stop.prevent="handleSubmit">
-            <b-form-group
-              :state="passwordState"
-              label="Password"
-              label-for="password-input"
-              invalid-feedback="Password must be at least 4 characters long"
-            >
-              <b-form-input
-                id="password-input"
-                v-model="password"
-                type="password"
-                :state="passwordState"
-                required
-              ></b-form-input>
-            </b-form-group>
-          </form>
-        </b-modal>
+          :fields="loginModal"
+          v-on:submit="loginModalSubmit"
+        ></Modal>
+        <Modal
+          id = "new-session-modal"
+          title="New Session"
+          :fields="newSessionModal"
+          v-on:submit="newSessionModalSubmit"
+        ></Modal>
       </div>
       <FloatButton
         icon="plus"
-        v-on:float-button-clicked="addNewSession"
+        v-on:float-button-clicked="$bvModal.show('new-session-modal')"
       >
       </FloatButton>
       <NavBar
@@ -68,6 +54,8 @@ import { mapGetters, mapActions } from 'vuex';
 import Header from '@/components/Header.vue';
 import NavBar from '@/components/NavBar.vue';
 import FloatButton from '@/components/FloatButton.vue';
+import Modal from '@/components/Modal.vue';
+
 import List from '@/components/List.vue';
 
 export default {
@@ -77,16 +65,36 @@ export default {
     NavBar,
     List,
     FloatButton,
+    Modal,
   },
   data() {
     return {
       loginAttemptId: '',
-      showLoginModal: false,
       loading: false,
       periodicCheck: 0,
-      password: '',
-      passwordState: null,
+      circle: () => 'Circle',
       navBarIcons: ['list-task', 'music-note-list'],
+      loginModal: [{
+        id: 'password',
+        label: 'Password',
+        invalidFeedback: 'Password must be at least 4 characters long',
+        isValid: (id) => (id && id.length >= 4),
+        type: 'password',
+      }],
+      newSessionModal: [{
+        id: 'name',
+        label: 'Name',
+        invalidFeedback: 'Name must be at least a character long',
+        isValid: (id) => (id && id.length >= 0),
+        type: 'text',
+      },
+      {
+        id: 'password',
+        label: 'Password',
+        invalidFeedback: 'Password must be at least 4 characters long',
+        isValid: (id) => (id && id.length >= 4),
+        type: 'password',
+      }],
     };
   },
   computed: {
@@ -109,73 +117,41 @@ export default {
   destroyed() {
     clearInterval(this.periodicCheck);
   },
-  watch: {
-    showLoginModal(newVal) {
-      if (!newVal) this.loginAttemptId = '';
-    },
-  },
   methods: {
     ...mapActions([
       'addSession',
       'getAllSessions',
       'setActiveSessionId',
+      'loginToSession',
     ]),
-    circle() {
-      return 'circle';
+    async loginModalSubmit(vals) {
+      this.loading = true;
+      await this.loginToSession({
+        session_id: this.loginAttemptId,
+        password: vals.password,
+      });
+      this.loading = false;
+      this.loginAttemptId = '';
+    },
+    newSessionModalSubmit(vals) {
+      this.addSession({ name: vals.name, password: vals.password });
     },
     calcLocked(session) {
       return session.session_id !== this.activeSessionId ? 'lock' : 'unlock';
     },
-    login(pass) {
-      console.log('validate password');
-      console.log(pass);
-      this.loading = true;
-      setTimeout(() => {
-        this.loading = false;
-      }, 2000);
-      this.setActiveSessionId(this.loginAttemptId);
-    },
     sessionClicked(session) {
       this.loginAttemptId = session.session_id;
-      this.showLoginModal = true;
-    },
-    goToHome() {
-      this.$router.push('/');
+      this.$bvModal.show('login-modal');
     },
     navBarClicked(idx) {
       if (idx === 1) {
         this.$router.push('/songs');
       }
     },
-    addNewSession() {
-      this.addSession();
-    },
     async load() {
       this.loading = true;
       await this.getAllSessions();
       this.loading = false;
-    },
-    checkFormValidity() {
-      const valid = this.$refs.form.checkValidity() && this.password.length >= 4;
-      this.passwordState = valid;
-      return valid;
-    },
-    resetModal() {
-      this.password = '';
-      this.passwordState = null;
-    },
-    handleOk(bvModalEvt) {
-      bvModalEvt.preventDefault();
-      this.handleSubmit();
-    },
-    handleSubmit() {
-      if (!this.checkFormValidity()) {
-        return;
-      }
-      this.login(this.password);
-      this.$nextTick(() => {
-        this.$bvModal.hide('login-modal');
-      });
     },
   },
 };

@@ -2,36 +2,56 @@ const { Session, Dates, State, Team, SessionSong } = require('./models');
 const { deleteTeam } = require('./teams');
 const fs = require('fs');
 const path = require('path');
+const bcrypt = require('bcrypt');
 
 async function newSession(req) {
-    let dates = await Dates.forge({
-      'start': (req && req['day_1']) || new Date(),
-      'final': (req && req.final) || new Date()
-    }).save();
-    const datesId = dates.toJSON()['dates_id'];
-    let state = await State.forge({
-      'home': true,
-      'race': false,
-      'song_overlay': false,
-      'slide_id': null
-    }).save();
-    const stateId = state.toJSON()['state_id'];
-    let session = await Session.forge({
-      'name': (req && req.name) || 'Default',
-      'password_hash': req && req['password_hash'],
-      'dates_id': datesId,
-      'state_id': stateId
-    }).save();
-    return session.toJSON();
+    if (req && req.name && req.password) {
+      let dates = await Dates.forge({
+        'start': (req && req['day_1']) || new Date(),
+        'final': (req && req.final) || new Date()
+      }).save();
+      const datesId = dates.toJSON()['dates_id'];
+      let state = await State.forge({
+        'home': true,
+        'race': false,
+        'song_overlay': false,
+        'slide_id': null
+      }).save();
+      const stateId = state.toJSON()['state_id'];
+      const hash = await bcrypt.hash(req.password, 10);
+      let session = await Session.forge({
+        'name': (req && req.name) || 'Default',
+        'password_hash': hash,
+        'dates_id': datesId,
+        'state_id': stateId
+      }).save();
+      return session.toJSON();
+    } else {
+      throw new Error('Please provide name and password')
+    }
+}
+
+async function loginToSession(id, req) {
+  if (req && id && req.password) {
+    const sessionRequest = await new Session({ ['session_id']: id }).fetch({ columns: ['session_id', 'password_hash'] });
+    const session = sessionRequest.toJSON();
+    if (session.password_hash) {
+      return await bcrypt.compare(req.password, session.password_hash);
+    } else {
+      throw new Error('No session found with that ID');
+    }
+  } else {
+    throw new Error('Please provide id and password')
+  }
 }
 
 async function getAllSessions() {
-    const sessions = await Session.fetchAll();
+    const sessions = await Session.fetchAll({ columns: ['session_id', 'name'] });
     return sessions.toJSON();
 }
 
 async function getSession(id) {
-    const sessionRequest = await new Session({ ['session_id']: id }).fetch();
+    const sessionRequest = await new Session({ ['session_id']: id }).fetch({ columns: ['session_id', 'name', 'dates_id', 'state_id'] });
     const session = sessionRequest.toJSON();
     const datesRequest = await new Dates({ ['dates_id']: session['dates_id'] }).fetch();
     const stateRequest = await new State({ ['state_id']: session['state_id'] }).fetch();
@@ -184,4 +204,5 @@ module.exports = {
     sessionHomeUpload,
     deleteSessionRace,
     deleteSessionHome,
+    loginToSession,
 };

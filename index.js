@@ -7,6 +7,7 @@ const multer = require("multer");
 const morgan = require('morgan');
 const bookshelf = require('./bookshelf');
 const socketIO = require('socket.io');
+const cookieParser = require('cookie-parser');
 var http = require('http');
 
 const {
@@ -38,6 +39,7 @@ const {
     sessionHomeUpload,
     deleteSessionRace,
     deleteSessionHome,
+    loginToSession,
 } = require('./sessions');
 
 const {
@@ -73,9 +75,13 @@ const {
 
 const app = express();
 
+const password = fs.readFileSync('./secrets/postgres-passwd', 'utf8').trim();
+
+
 app.use(morgan('tiny'));
 app.use(cors({credentials: true, origin: 'http://localhost:8080'}));
 app.use(bodyParser.json());
+app.use(cookieParser(password));
 app.use('/', express.static(__dirname + '/frontend/dist'));
 
 var server = http.createServer(app);
@@ -131,6 +137,25 @@ app.get('/sessions', async (req, res) => {
 app.get('/session/:id', async (req, res) => {
     try {
       res.json(await getSession(req.params.id));
+    } catch (e) {
+      res.status(400).send(e.message);
+    }
+});
+
+app.post('/session/login/:id', async (req, res) => {
+    try {
+      const valid = await loginToSession(req.params.id, req.body);
+      if (valid) {
+        const isSecure = req.app.get('env') !== 'development';
+        res.cookie('session_id', req.params.id, {
+          httpOnly: true,
+          signed: true,
+          secure: isSecure,
+        });
+        res.send('Logged in');
+      } else {
+        res.status(401).send('Invalid credentials')
+      }
     } catch (e) {
       res.status(400).send(e.message);
     }

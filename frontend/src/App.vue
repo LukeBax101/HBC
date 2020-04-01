@@ -1,13 +1,44 @@
 <template>
   <div id="app">
+    <transition name="slide">
+      <b-alert class="alert" :variant="type" v-model="show"> {{ text }}</b-alert>
+    </transition>
     <transition
         name="fade"
         mode="out-in"
       >
-    <router-view/>
+    <router-view class="router"/>
   </transition>
+
   </div>
 </template>
+
+<script>
+import { mapGetters } from 'vuex';
+import EventBus from './event-bus';
+
+export default {
+  name: 'App',
+  data() {
+    return {
+      show: 0,
+      text: '',
+      type: '',
+    };
+  },
+  mounted() {
+    EventBus.$on('show-alert', (data) => {
+      this.text = data.text;
+      this.type = data.type || 'danger';
+      this.show = data.duration || 2;
+    });
+  },
+  destroyed() {
+    EventBus.$off('show-alert');
+  },
+};
+</script>
+
 
 <style>
 #app {
@@ -45,5 +76,30 @@
 .fade-enter,
 .fade-leave-active {
   opacity: 0
+}
+.alert {
+  position: absolute;
+  top: 55px;
+  z-index: 10000;
+}
+
+.router {
+  top: 0px;
+}
+
+
+.slide-enter-active {
+  animation: slide-in .3s;
+}
+.slide-leave-active {
+  animation: slide-in .3s reverse;
+}
+@keyframes slide-in {
+  0% {
+    top: -110px;
+  }
+  100% {
+   top : 55px;
+  }
 }
 </style>
